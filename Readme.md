@@ -17,6 +17,10 @@
 
 🔗 **Live Website**: [https://delhi-court-tracker.onrender.com]
 
+if due to server down 502 website will not open then you can try 2nd link!
+
+🔗 **2nd Limk**: [https://ed476b8e.delhi-court-tracker.pages.dev/]
+
 ---
 
 ## 📂 Project Structure
@@ -103,3 +107,4 @@ This version:
 ✅ Provides clear case type examples  
 ✅ Includes ready-to-run code snippets  
 ✅ Maintains professional structure  
+
