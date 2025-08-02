@@ -1,0 +1,27 @@
+{
+  "name": "delhi-hc-tracker-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Delhi High Court Case Tracker (Node.js + Express + MongoDB)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "seed": "node ./database/mongo_seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongoose": "^8.1.3",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
+"engines": {
+  "node": "18.x"
+}
