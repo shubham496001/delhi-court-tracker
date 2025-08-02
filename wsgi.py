@@ -50,13 +50,7 @@ def init_db():
              'Notice issued to respondents', '/orders/WPC1234.pdf'),
             ('CRL.A', 567, 2022, 'State of Delhi', 'Rajesh Kumar', 
              '2022-05-20', '2023-08-25', 'Appeal Admitted', 'Justice Verma',
-             'Bail granted with conditions', '/orders/CRLA567.pdf'),
-            ('CS(OS)', 789, 2021, 'M/S ABC Properties', 'XYZ Developers', 
-             '2021-01-10', '2023-08-30', 'Part-Heard', 'Justice Kapoor',
-             'Interim injunction granted', '/orders/CSOS789.pdf'),
-            ('TEST.CAS.', 12, 2022, 'Priya Malhotra', 'Vikram Malhotra',
-             '2022-08-05', None, 'Probate Granted', 'Justice Oberoi',
-             'Will validated', '/orders/TESTCAS12.pdf')
+             'Bail granted with conditions', '/orders/CRLA567.pdf')
         ]
         
         cursor.executemany('''
@@ -87,7 +81,7 @@ def search_case():
 
         # Validate inputs
         if not all([case_type, case_number, filing_year]):
-            return jsonify({'status': 'error', 'message': 'Missing required fields'})
+            return jsonify({'status': 'error', 'message': 'Missing required fields'}), 400
 
         # Query database
         conn = get_db_connection()
@@ -105,9 +99,9 @@ def search_case():
             return jsonify({
                 'status': 'error', 
                 'message': 'Case not found in database'
-            })
+            }), 404
 
-        # Format the response data
+        # Format response
         response_data = {
             'case_type': case[1],
             'case_number': case[2],
@@ -120,12 +114,7 @@ def search_case():
             'status': case[8],
             'judge': case[9],
             'latest_order': case[10],
-            'pdf_link': case[11],
-            'orders': [{
-                'date': format_date(case[6]),
-                'description': case[10],
-                'pdf_link': case[11]
-            }]
+            'pdf_link': case[11]
         }
 
         return jsonify({
@@ -138,7 +127,7 @@ def search_case():
             'status': 'error',
             'message': 'Internal server error',
             'detail': str(e)
-        })
+        }), 500
 
 def format_date(date_str):
     """Format YYYY-MM-DD date to DD Month YYYY"""
@@ -148,27 +137,10 @@ def format_date(date_str):
         date_obj = datetime.strptime(date_str, '%Y-%m-%d')
         return date_obj.strftime('%d %B %Y')
     except ValueError:
-        return date_str  # Return as-is if not in expected format
+        return date_str
 
-# Initialize the database when starting the app
+# Initialize database
 init_db()
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
-    
-from flask import Flask, request, jsonify
-import requests
-
-app = Flask(__name__)
-
-# Proxy to Node.js backend
-@app.route('/api/cases/search')
-def search_case():
-    response = requests.get(
-        'http://localhost:5000/api/cases/search',
-        params=request.args
-    )
-    return jsonify(response.json())
-
-if __name__ == '__main__':
-    app.run(port=3000)
